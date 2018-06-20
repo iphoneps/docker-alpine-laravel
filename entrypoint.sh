@@ -22,8 +22,6 @@ fi
 if [ "XDEBUG" = "enable" ]; then
     apk --no-cache add php7-xdebug
     cp -r /etc/php7/conf.d/xdebug.inioff /etc/php7/conf.d/xdebug.ini
-    nginx -s reload
-
 fi
 
 exec /usr/bin/supervisord --nodaemon -c /etc/supervisor/conf.d/supervisord.conf
