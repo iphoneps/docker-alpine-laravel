@@ -1,6 +1,8 @@
 FROM alpine:3.7
 LABEL Maintainer="Janis Purins <janis@purins.lv>"
 
+RUN apk update
+
 # Install packages
 RUN apk --no-cache add php7 php7-fpm php7-zip php7-json php7-openssl php7-curl \
     php7-zlib php7-xml php7-phar php7-intl php7-dom php7-xmlreader php7-xmlwriter php7-ctype \

@@ -25,7 +25,7 @@ if [ "$XDEBUG" = "enable" ]; then
     echo 'Enabling xdebug'
     apk --no-cache add php7-xdebug
     mv /etc/php7/conf.d/xdebug.inioff /etc/php7/conf.d/xdebug.ini
-
+    echo "xdebug.remote_host="`/sbin/ip route|awk '/default/ { print $3 }'` >> /etc/php7/conf.d/xdebug.ini
 fi
 
 exec /usr/bin/supervisord --nodaemon -c /etc/supervisor/conf.d/supervisord.conf
