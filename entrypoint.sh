@@ -16,13 +16,13 @@ npm install
 npm run dev
 
 if [ "QUEUE_WORKER" = "enable" ]; then
-    apk --no-cache add php7-xdebug
     cp -r /etc/supervisor/conf.d/supervisord-queue-worker.conf /etc/supervisor/conf.d/supervisord.conf
-    nginx -s reload
 fi
 
 if [ "XDEBUG" = "enable" ]; then
+    apk --no-cache add php7-xdebug
     cp -r /etc/php7/conf.d/xdebug.inioff /etc/php7/conf.d/xdebug.ini
+    nginx -s reload
 
 fi
 
