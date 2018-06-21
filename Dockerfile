@@ -26,6 +26,8 @@ COPY ./docker-config/supervisord-ssh.conf /etc/supervisor/conf.d/supervisord-ssh
 # Configure composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+# rebuild node-sass binding for current os environment
+RUN npm rebuild node-sass
 
 # Setup Application Folder
 RUN mkdir -p /var/www/
