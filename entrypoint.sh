@@ -38,7 +38,7 @@ if [ "$XDEBUG" = "enable" ]; then
     echo 'Installing openssh'
     apk add --no-cache openssh
     sed -i s/#PermitRootLogin.*/PermitRootLogin\ yes/ /etc/ssh/sshd_config
-    echo "root:" | chpasswd
+    echo "root:root" | chpasswd
     ssh-keygen -A
 
     echo 'Run "ssh -R  127.0.0.1:9001:127.0.0.1:9000 -vvv -p 2222 root@localhost" to create reverse ssh tunnel'
