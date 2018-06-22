@@ -8,11 +8,8 @@ echo 'Setting Permissons'
 #chmod -R 775 . &&\
 #chown -R www-data:www-data /var/www
 
-echo 'Starting Artisan Commands'
-php artisan optimize
+echo 'Migrating databases'
 php artisan migrate --force
-
-#npm run dev
 
 if [ "$QUEUE_WORKER" = "enable" ]; then
     echo 'Queue worker will start'
@@ -41,7 +38,7 @@ if [ "$XDEBUG" = "enable" ]; then
     echo "root:root" | chpasswd
     ssh-keygen -A
 
-    echo 'Run "ssh -R  127.0.0.1:9001:127.0.0.1:9000 -vvv -p 2222 root@localhost" to create reverse ssh tunnel'
+    echo 'Run "ssh -fNT -R  127.0.0.1:9001:127.0.0.1:9000 -p 2222 root@localhost" to create reverse ssh tunnel'
 
     #supervisor with sshd
     cp -r /etc/supervisor/conf.d/supervisord-ssh.conf /etc/supervisor/conf.d/supervisord.conf

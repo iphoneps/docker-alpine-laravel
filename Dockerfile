@@ -33,6 +33,9 @@ RUN npm rebuild node-sass
 RUN mkdir -p /var/www/
 WORKDIR /var/www/
 
+# Cache composer packages
+RUN composer install -d composer-cache
+
 # Setup entrypouint that will be run on deploy
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
