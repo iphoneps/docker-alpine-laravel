@@ -2,11 +2,11 @@
 
 echo 'Setting Permissons'
 
-#chmod -R g+w storage &&\
-#chmod -R 775 storage &&\
-#chgrp -R www-data . &&\
-#chmod -R 775 . &&\
-#chown -R www-data:www-data /var/www
+chmod -R g+w storage &&\
+chmod -R 775 storage &&\
+chgrp -R www-data . &&\
+chmod -R 775 . &&\
+chown -R www-data:www-data /var/www
 
 echo 'Migrating databases'
 php artisan migrate --force
