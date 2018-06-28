@@ -1,19 +1,16 @@
 #!/bin/sh
 
 echo 'Setting Permissons'
-
-#chmod -R g+w storage &&\
-#chmod -R 775 storage &&\
-#chgrp -R www-data . &&\
-#chmod -R 775 . &&\
-#chown -R www-data:www-data /var/www
-
-echo 'Migrating databases'
-php artisan migrate --force
+chgrp -R www-data storage bootstrap/cache
+chmod -R ug+rwx storage bootstrap/cache
 
 if [ "$QUEUE_WORKER" = "enable" ]; then
     echo 'Queue worker will start'
     cp -r /etc/supervisor/conf.d/supervisord-queue-worker.conf /etc/supervisor/conf.d/supervisord.conf
+else
+    echo 'Web will start'
+    echo 'Migrating databases'
+    php artisan migrate --force
 fi
 
 
