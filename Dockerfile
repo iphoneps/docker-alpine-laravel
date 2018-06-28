@@ -28,7 +28,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 #RUN set -x ; \
 #RUN addgroup -g 82 -S www-data
-RUN adduser -u 82 -D -S -G www-data www-data && exit 0 ; exit 1
+#RUN adduser -u 82 -D -S -G www-data www-data && exit 0 ; exit 1
 
 # rebuild node-sass binding for current os environment
 RUN npm rebuild node-sass
