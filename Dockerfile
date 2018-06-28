@@ -8,7 +8,7 @@ RUN apk --no-cache add php7 php7-fpm php7-zip php7-json php7-openssl php7-curl \
     php7-zlib php7-xml php7-phar php7-intl php7-dom php7-xmlreader php7-xmlwriter php7-ctype \
     php7-mbstring php7-gd php7-session php7-pdo php7-pdo_mysql php7-tokenizer php7-posix \
     php7-fileinfo php7-opcache php7-cli php7-mcrypt php7-pcntl php7-iconv php7-simplexml \
-    nginx supervisor curl git openssh-client bash nodejs-npm
+    nginx supervisor curl git openssh-client bash nodejs-npm shadow
 
 # Configure nginx
 COPY ./docker-config/nginx.conf /etc/nginx/nginx.conf
@@ -26,10 +26,6 @@ COPY ./docker-config/supervisord-ssh.conf /etc/supervisor/conf.d/supervisord-ssh
 # Configure composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-#RUN set -x ; \
-#RUN addgroup -g 82 -S www-data
-#RUN adduser -u 82 -D -S -G www-data www-data && exit 0 ; exit 1
-
 # rebuild node-sass binding for current os environment
 RUN npm rebuild node-sass
 
@@ -37,7 +33,8 @@ RUN npm rebuild node-sass
 RUN mkdir -p /var/www/
 WORKDIR /var/www/
 
-
+# Fpm runs as nobody. To grant proper 775 permissions for laravel we add nobody to www-data group
+RUN usermod -aG www-data nobody
 
 # Setup entrypouint that will be run on deploy
 COPY entrypoint.sh /entrypoint.sh
