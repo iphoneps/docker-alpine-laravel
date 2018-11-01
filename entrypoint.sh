@@ -4,6 +4,8 @@ echo 'Setting Permissons'
 chgrp -R www-data storage bootstrap/cache
 chmod -R ug+rwx storage bootstrap/cache
 
+php artisan config:clear
+
 if [ "$QUEUE_WORKER" = "enable" ]; then
     echo 'Queue worker will start'
     cp -r /etc/supervisor/conf.d/supervisord-queue-worker.conf /etc/supervisor/conf.d/supervisord.conf
