@@ -1,39 +1,46 @@
-FROM alpine:3.10
+FROM ubuntu:18.04
 LABEL Maintainer="Janis Purins <janis@purins.lv>"
 
-# Install packages
-RUN apk --no-cache add php7 php7-fpm php7-zip php7-json php7-openssl php7-curl \
-    php7-zlib php7-xml php7-phar php7-intl php7-dom php7-xmlreader php7-xmlwriter php7-ctype \
-    php7-mbstring php7-gd php7-session php7-pdo php7-pdo_mysql php7-tokenizer php7-posix \
-    php7-fileinfo php7-opcache php7-cli php7-mcrypt php7-pcntl php7-iconv php7-simplexml \
-    php7-exif php7-pdo_sqlite nginx supervisor curl git openssh-client bash nodejs-npm shadow
+# Make sure random packages don't stop the installation by asking for user's input.
+ARG DEBIAN_FRONTEND=noninteractive
 
-# Configure nginx
+# Update default ubuntu packages
+RUN apt-get -y update
+
+# Install all necessary server packages
+RUN apt-get install --no-install-recommends --no-install-suggests -y  \
+	apt-utils software-properties-common nginx supervisor curl git openssh-client bash libzip-dev unzip nodejs npm
+
+# Install PHP. Has been properly maintained by this guy and with 7.4 its pretty much the only working option.
+RUN add-apt-repository ppa:ondrej/php && apt-get --assume-yes -y update && \
+	apt-get install --no-install-recommends --no-install-suggests --assume-yes -y  \
+	php7.4 php7.4-fpm \
+	php7.4-bcmath php7.4-mbstring php7.4-mysql php7.4-zip php7.4-curl php7.4-xml php7.4-imagick
+
+# Install composer and parralel install package (significantly speeds up composer install on servers)
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN composer global require hirak/prestissimo
+
+# Update NPM to the latest version. Huge diference in install speed afterwards.
+RUN npm i -g npm
+
+# Create run folder for PHP process
+RUN mkdir -p /run/php/
+
+# Configure PHP
+COPY ./docker-config/php-fpm.conf /etc/php/7.4/fpm/php-fpm.conf
+COPY ./docker-config/www.conf /etc/php/7.4/fpm/pool.d/www.conf
+
+COPY ./docker-config/php.ini /etc/php/7.4/fpm/conf.d/zzz_custom.ini
+COPY ./docker-config/xdebug.ini /etc/php/7.4/fpm/conf.d/xdebug.inioff
+
+# Configure Nginx
 COPY ./docker-config/nginx.conf /etc/nginx/nginx.conf
 
-# Configure PHP-FPM
-COPY ./docker-config/fpm-pool.conf /etc/php7/php-fpm.d/zzz_custom.conf
-COPY ./docker-config/php.ini /etc/php7/conf.d/zzz_custom.ini
-COPY ./docker-config/xdebug.ini /etc/php7/conf.d/xdebug.inioff
-
-# Configure supervisord
-COPY ./docker-config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY ./docker-config/supervisord-queue-worker.conf /etc/supervisor/conf.d/supervisord-queue-worker.conf
-COPY ./docker-config/supervisord-ssh.conf /etc/supervisor/conf.d/supervisord-ssh.conf
-
-# Configure composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-# rebuild node-sass binding for current os environment
-RUN npm rebuild node-sass
-
-# Setup Application Folder
+# Setup application folder
 RUN mkdir -p /var/www/
 WORKDIR /var/www/
 
-# Fpm runs as nobody. To grant proper 775 permissions for laravel we add nobody to www-data group
-RUN usermod -aG www-data nobody
-
-# Setup entrypouint that will be run on deploy
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# Copy config files
+COPY ./docker-config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY ./docker-config/supervisord-ssh.conf /etc/supervisor/conf.d/supervisord-ssh.conf
