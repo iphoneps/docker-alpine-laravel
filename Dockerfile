@@ -4,25 +4,30 @@ LABEL Maintainer="Janis Purins <janis@purins.lv>"
 # Make sure random packages don't stop the installation by asking for user's input.
 ARG DEBIAN_FRONTEND=noninteractive
 
+# Merged a lot of commands under the same docker layer to optimise size
+RUN \
 # Update default ubuntu packages
-RUN apt-get -y update
+apt-get -y update && \
 
 # Install all necessary server packages
-RUN apt-get install --no-install-recommends --no-install-suggests -y  \
-	apt-utils software-properties-common nginx supervisor curl git openssh-client bash libzip-dev unzip nodejs npm
+apt-get install --no-install-recommends --no-install-suggests -y  \
+	software-properties-common nginx supervisor curl openssh-client bash unzip nodejs npm netcat mysql-client && \
 
 # Install PHP. Has been properly maintained by this guy and with 7.4 its pretty much the only working option.
-RUN add-apt-repository ppa:ondrej/php && apt-get --assume-yes -y update && \
-	apt-get install --no-install-recommends --no-install-suggests --assume-yes -y  \
+add-apt-repository ppa:ondrej/php && \
+apt-get --assume-yes -y update && \
+apt-get install --no-install-recommends --no-install-suggests --assume-yes -y  \
 	php7.4 php7.4-fpm \
-	php7.4-bcmath php7.4-mbstring php7.4-mysql php7.4-zip php7.4-curl php7.4-xml php7.4-imagick
+	php7.4-bcmath php7.4-mbstring php7.4-mysql php7.4-zip php7.4-curl php7.4-xml php7.4-imagick  && \
 
 # Install composer and parralel install package (significantly speeds up composer install on servers)
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-RUN composer global require hirak/prestissimo
+curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
+	composer global require hirak/prestissimo  && \
+
+apt-get autoclean  && \
 
 # Update NPM to the latest version. Huge diference in install speed afterwards.
-RUN npm i -g npm
+npm i -g npm
 
 # Create run folder for PHP process
 RUN mkdir -p /run/php/
