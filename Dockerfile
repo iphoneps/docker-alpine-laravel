@@ -9,9 +9,10 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get -y update && \
 # Install all necessary server packages
 apt-get install --no-install-recommends --no-install-suggests -y  \
-	software-properties-common nginx supervisor curl openssh-client bash unzip netcat mysql-client && \
-curl -sL https://deb.nodesource.com/setup_4.x | bash && \
-apt-get install nodejs && \
+	software-properties-common nginx supervisor curl openssh-client bash unzip netcat mysql-client gpg-agent && \
+curl -sL https://deb.nodesource.com/setup_15.x | bash - && \
+apt-get install -yq nodejs build-essential && \
+npm install -g npm && \
 # Install PHP. Has been properly maintained by this guy and with 7.4 its pretty much the only working option.
 add-apt-repository ppa:ondrej/php && \
 apt-get --assume-yes -y update && \
