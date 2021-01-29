@@ -11,15 +11,14 @@ RUN apt-get -y update && \
 apt-get install --no-install-recommends --no-install-suggests -y  \
 	software-properties-common nginx supervisor curl openssh-client bash unzip netcat mysql-client gpg-agent && \
 # Install Node and NPM (Repo for the node LTS version is not available in ubuntu 20 by default for some reason)
-curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
-apt-get install --no-install-recommends --no-install-suggests -y  \
-    nodejs && \
+curl -sL https://deb.nodesource.com/setup_15.x | bash - && \
+apt-get install --no-install-recommends --no-install-suggests -yq nodejs build-essential && \
 # Install PHP. Has been properly maintained by this guy and with 7.4 its pretty much the only working option.
 add-apt-repository ppa:ondrej/php && \
 apt-get --assume-yes -y update && \
 apt-get install --no-install-recommends --no-install-suggests --assume-yes -y  \
 	php7.4 php7.4-fpm \
-	php7.4-bcmath php7.4-mbstring php7.4-mysql php7.4-zip php7.4-curl php7.4-xml php7.4-imagick && \
+	php7.4-bcmath php7.4-mbstring php7.4-mysql php7.4-zip php7.4-curl php7.4-xml php7.4-imagick php7.4-gd && \
 # Install composer and parralel install package (significantly speeds up composer install on servers)
 curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
 composer self-update --1 && \
