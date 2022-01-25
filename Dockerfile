@@ -21,7 +21,6 @@ apt-get install --no-install-recommends --no-install-suggests --assume-yes -y  \
 	php8.0-bcmath php8.0-mbstring php8.0-mysql php8.0-zip php8.0-curl php8.0-xml php8.0-imagick php8.0-gd && \
 # Install composer and parralel install package (significantly speeds up composer install on servers)
 curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
-composer self-update --1 && \
 composer global require hirak/prestissimo && \
 # clean ubuntu apk cache
 apt-get autoclean && \
