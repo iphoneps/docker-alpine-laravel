@@ -20,8 +20,7 @@ apt-get install --no-install-recommends --no-install-suggests --assume-yes -y  \
 	php7.4 php7.4-fpm \
 	php7.4-bcmath php7.4-mbstring php7.4-mysql php7.4-zip php7.4-curl php7.4-xml php7.4-imagick php7.4-gd && \
 # Install composer and parralel install package (significantly speeds up composer install on servers)
-curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer  && \
-composer global require hirak/prestissimo && \
+curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
 # clean ubuntu apk cache
 apt-get autoclean && \
 # Create run folder for PHP process
