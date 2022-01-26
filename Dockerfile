@@ -1,5 +1,5 @@
 FROM ubuntu:20.04
-LABEL Maintainer="Janis Purins <janis@purins.lv>"
+LABEL Maintainer="Admin <admin@iphonephotographyschool.com>"
 
 # Make sure random packages don't stop the installation by asking for user's input.
 ARG DEBIAN_FRONTEND=noninteractive
