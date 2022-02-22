@@ -11,7 +11,7 @@ RUN apt-get -y update && \
 apt-get install --no-install-recommends --no-install-suggests -y  \
 	software-properties-common nginx supervisor curl openssh-client bash unzip netcat mysql-client gpg-agent && \
 # Install Node and NPM (Repo for the node LTS version is not available in ubuntu 20 by default for some reason)
-curl -sL https://deb.nodesource.com/setup_15.x | bash - && \
+curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
 apt-get install --no-install-recommends --no-install-suggests -yq nodejs build-essential && \
 # Install PHP. Has been properly maintained by this guy and with 7.4 its pretty much the only working option.
 add-apt-repository ppa:ondrej/php && \
