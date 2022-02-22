@@ -26,6 +26,8 @@ apt-get autoclean && \
 # Create run folder for PHP process
 mkdir -p /run/php/
 
+RUN apt-get -y install git
+
 # Configure PHP
 COPY ./docker-config/php-fpm.conf /etc/php/7.4/fpm/php-fpm.conf
 COPY ./docker-config/www.conf /etc/php/7.4/fpm/pool.d/www.conf
