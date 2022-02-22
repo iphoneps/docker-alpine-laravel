@@ -1,5 +1,5 @@
 FROM ubuntu:20.04
-LABEL Maintainer="Janis Purins <janis@purins.lv>"
+LABEL Maintainer="Admin <admin@iphonephotographyschool.com>"
 
 # Make sure random packages don't stop the installation by asking for user's input.
 ARG DEBIAN_FRONTEND=noninteractive
@@ -11,7 +11,7 @@ RUN apt-get -y update && \
 apt-get install --no-install-recommends --no-install-suggests -y  \
 	software-properties-common nginx supervisor curl openssh-client bash unzip netcat mysql-client gpg-agent && \
 # Install Node and NPM (Repo for the node LTS version is not available in ubuntu 20 by default for some reason)
-curl -sL https://deb.nodesource.com/setup_15.x | bash - && \
+curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
 apt-get install --no-install-recommends --no-install-suggests -yq nodejs build-essential && \
 # Install PHP. Has been properly maintained by this guy and with 7.4 its pretty much the only working option.
 add-apt-repository ppa:ondrej/php && \
@@ -25,6 +25,8 @@ curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin
 apt-get autoclean && \
 # Create run folder for PHP process
 mkdir -p /run/php/
+
+RUN apt-get -y install git
 
 # Configure PHP
 COPY ./docker-config/php-fpm.conf /etc/php/8.0/fpm/php-fpm.conf
