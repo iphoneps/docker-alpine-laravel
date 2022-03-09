@@ -19,7 +19,7 @@ apt-get --assume-yes -y update && \
 apt-get install --no-install-recommends --no-install-suggests --assume-yes -y  \
 	php8.1 php8.1-fpm \
 	php8.1-bcmath php8.1-mbstring php8.1-mysql php8.1-zip php8.1-curl php8.1-xml php8.1-imagick php8.1-gd && \
-# Install composer and parallel install package (significantly speeds up composer install on servers)
+# Install composer
 curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
 # clean ubuntu apk cache
 apt-get autoclean && \
