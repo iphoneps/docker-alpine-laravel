@@ -17,8 +17,8 @@ apt-get install --no-install-recommends --no-install-suggests -yq nodejs build-e
 add-apt-repository ppa:ondrej/php && \
 apt-get --assume-yes -y update && \
 apt-get install --no-install-recommends --no-install-suggests --assume-yes -y  \
-	php8.0 php8.0-fpm \
-	php8.0-bcmath php8.0-mbstring php8.0-mysql php8.0-zip php8.0-curl php8.0-xml php8.0-imagick php8.0-gd && \
+	php8.1 php8.1-fpm \
+	php8.1-bcmath php8.1-mbstring php8.1-mysql php8.1-zip php8.1-curl php8.1-xml php8.1-imagick php8.1-gd && \
 # Install composer and parallel install package (significantly speeds up composer install on servers)
 curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
 # clean ubuntu apk cache
@@ -29,11 +29,11 @@ mkdir -p /run/php/
 RUN apt-get -y install git
 
 # Configure PHP
-COPY ./docker-config/php-fpm.conf /etc/php/8.0/fpm/php-fpm.conf
-COPY ./docker-config/www.conf /etc/php/8.0/fpm/pool.d/www.conf
+COPY ./docker-config/php-fpm.conf /etc/php/8.1/fpm/php-fpm.conf
+COPY ./docker-config/www.conf /etc/php/8.1/fpm/pool.d/www.conf
 
-COPY ./docker-config/php.ini /etc/php/8.0/fpm/conf.d/zzz_custom.ini
-COPY ./docker-config/xdebug.ini /etc/php/8.0/fpm/conf.d/xdebug.inioff
+COPY ./docker-config/php.ini /etc/php/8.1/fpm/conf.d/zzz_custom.ini
+COPY ./docker-config/xdebug.ini /etc/php/8.1/fpm/conf.d/xdebug.inioff
 
 # Configure Nginx
 COPY ./docker-config/nginx.conf /etc/nginx/nginx.conf
