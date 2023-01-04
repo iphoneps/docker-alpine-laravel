@@ -18,7 +18,7 @@ add-apt-repository ppa:ondrej/php && \
 apt-get --assume-yes -y update && \
 apt-get install --no-install-recommends --no-install-suggests --assume-yes -y  \
 	php8.1 php8.1-fpm \
-	php8.1-bcmath php8.1-mbstring php8.1-mysql php8.1-zip php8.1-curl php8.1-xml php8.1-gd php8.1-intl && \
+	php8.1-bcmath php8.1-mbstring php8.1-mysql php8.1-zip php8.1-curl php8.1-xml php8.1-gd php8.1-intl php8.1-dev && \
 # Install composer
 curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
 # clean ubuntu apk cache
@@ -56,6 +56,14 @@ RUN rm -rf libheif ImageMagick
 
 RUN apt-get install --no-install-recommends --no-install-suggests --assume-yes -y \
      php8.1-imagick
+
+RUN git clone https://github.com/Imagick/imagick
+WORKDIR /home/imagick
+RUN phpize && ./configure
+RUN make
+RUN make install
+
+WORKDIR /home
 
 # Configure PHP
 COPY ./docker-config/php-fpm.conf /etc/php/8.1/fpm/php-fpm.conf
