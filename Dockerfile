@@ -26,6 +26,8 @@ apt-get autoclean && \
 # Create run folder for PHP process
 mkdir -p /run/php/
 
+RUN npm i -g npm@8.5.0
+
 RUN apt-get -y install git
 
 RUN sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list
