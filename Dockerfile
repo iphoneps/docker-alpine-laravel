@@ -33,7 +33,7 @@ RUN apt-get -y install git
 RUN sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list
 RUN apt-get update
 RUN apt-get install --assume-yes build-essential autoconf libtool
-RUN apt-get build-dep --assume-yes imagemagick libmagickcore-dev libde265 libheif
+# RUN apt-get build-dep --assume-yes imagemagick libmagickcore-dev libde265 libheif
 
 WORKDIR /home
 RUN git clone https://github.com/strukturag/libheif.git
