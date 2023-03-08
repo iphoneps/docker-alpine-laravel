@@ -7,7 +7,6 @@ ARG DEBIAN_FRONTEND=noninteractive
 # Merged a lot of commands under the same docker layer to optimise size
 # Update default ubuntu packages
 RUN apt-get -y update && \
-    apt-get autoremove -y && \
 # Install all necessary server packages
 apt-get install --no-install-recommends --no-install-suggests -y  \
 	software-properties-common nginx supervisor curl openssh-client bash unzip netcat mysql-client gpg-agent && \
@@ -20,7 +19,6 @@ apt-get --assume-yes -y update && \
 apt-get install --no-install-recommends --no-install-suggests --assume-yes -y  \
 	php8.1 php8.1-fpm \
 	php8.1-bcmath php8.1-mbstring php8.1-mysql php8.1-zip php8.1-curl php8.1-xml php8.1-gd php8.1-intl php8.1-dev && \
-rm -rf /var/lib/apt/lists/* && \
 # Install composer
 curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
 # clean ubuntu apk cache
@@ -56,7 +54,7 @@ RUN make install
 
 WORKDIR /home
 RUN ldconfig
-RUN rm -rf libheif ImageMagick
+RUN rm -rf libheif ImageMagick-7.1.0
 
 RUN apt-get install --no-install-recommends --no-install-suggests --assume-yes -y \
      php8.1-imagick
@@ -68,6 +66,12 @@ RUN make
 RUN make install
 
 WORKDIR /home
+
+RUN apt-get update -y && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf archive.tar.gz
+
 RUN rm -rf imagick
 
 # Configure PHP
@@ -82,6 +86,7 @@ COPY ./docker-config/nginx.conf /etc/nginx/nginx.conf
 
 # Setup application folder
 RUN mkdir -p /var/www/
+
 WORKDIR /var/www/
 
 # Copy config files
