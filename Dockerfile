@@ -21,18 +21,20 @@ apt-get install --no-install-recommends --no-install-suggests --assume-yes -y  \
 	php8.1-bcmath php8.1-mbstring php8.1-mysql php8.1-zip php8.1-curl php8.1-xml php8.1-gd php8.1-intl php8.1-dev && \
 # Install composer
 curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
+# Install git
+apt-get -y install --no-install-recommends git && \
 # clean ubuntu apk cache
 apt-get autoclean && \
-apt-get -y install git && \
 # Create run folder for PHP process
 mkdir -p /run/php/
 
 RUN npm i -g npm@9.2
 
-RUN sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list
-RUN apt-get -y update && \
-    apt-get install --no-install-recommends --assume-yes build-essential autoconf libtool && \
-    apt-get build-dep --assume-yes --no-install-recommends imagemagick libmagickcore-dev libde265 libheif
+# Prepare imagemagick installation
+RUN sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list && \
+apt-get -y update && \
+apt-get install --no-install-recommends --assume-yes build-essential autoconf libtool && \
+apt-get build-dep --assume-yes --no-install-recommends imagemagick libmagickcore-dev libde265 libheif
 
 WORKDIR /home
 RUN git clone https://github.com/strukturag/libheif.git
