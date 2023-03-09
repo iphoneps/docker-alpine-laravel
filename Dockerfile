@@ -37,43 +37,54 @@ apt-get install --no-install-recommends --assume-yes build-essential autoconf li
 apt-get build-dep --assume-yes --no-install-recommends imagemagick libmagickcore-dev libde265 libheif
 
 WORKDIR /home
+
+# Install & configure libheif
 RUN git clone https://github.com/strukturag/libheif.git
+
 WORKDIR /home/libheif
-RUN ./autogen.sh
-RUN ./configure
-RUN make
-RUN make install
-RUN cd ..
+
+RUN ./autogen.sh && \
+    ./configure && \
+    make && \
+    make install
 
 WORKDIR /home
 
+# Install & configure ImageMagick
 RUN git clone https://github.com/ImageMagick/ImageMagick.git ImageMagick-7.1.0
+
 WORKDIR /home/ImageMagick-7.1.0
-RUN ./configure --with-heic=yes
-RUN make
-RUN make install
+
+RUN ./configure --with-heic=yes && \
+    make && \
+    make install
 
 WORKDIR /home
-RUN ldconfig
-RUN rm -rf libheif ImageMagick-7.1.0
 
-RUN apt-get install --no-install-recommends --no-install-suggests --assume-yes -y \
-     php8.1-imagick
+RUN ldconfig && \
+    rm -rf libheif ImageMagick-7.1.0
 
+RUN apt-get update -y && \
+    apt-get install --no-install-recommends --no-install-suggests --assume-yes -y php8.1-imagick
+
+# Install & configure imagick
 RUN git clone https://github.com/Imagick/imagick
+
 WORKDIR /home/imagick
-RUN phpize && ./configure
-RUN make
-RUN make install
+
+RUN phpize && ./configure && \
+    make && \
+    make install
 
 WORKDIR /home
+
+RUN rm -rf imagick
 
 RUN apt-get update -y && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf archive.tar.gz
 
-RUN rm -rf imagick
 
 # Configure PHP
 COPY ./docker-config/php-fpm.conf /etc/php/8.1/fpm/php-fpm.conf
