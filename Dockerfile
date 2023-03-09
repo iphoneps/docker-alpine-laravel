@@ -32,9 +32,9 @@ RUN npm i -g npm@9.2
 
 # Prepare imagemagick installation
 RUN sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list && \
-apt-get -y update && \
-apt-get install --no-install-recommends --assume-yes build-essential autoconf libtool && \
-apt-get build-dep --assume-yes --no-install-recommends imagemagick libmagickcore-dev libde265 libheif
+    apt-get -y update && \
+    apt-get install --no-install-recommends --assume-yes build-essential autoconf libtool && \
+    apt-get build-dep --assume-yes --no-install-recommends imagemagick libmagickcore-dev libde265 libheif
 
 WORKDIR /home
 
