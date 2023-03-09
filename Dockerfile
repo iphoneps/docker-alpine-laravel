@@ -23,17 +23,16 @@ apt-get install --no-install-recommends --no-install-suggests --assume-yes -y  \
 curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
 # clean ubuntu apk cache
 apt-get autoclean && \
+apt-get -y install git && \
 # Create run folder for PHP process
 mkdir -p /run/php/
 
 RUN npm i -g npm@9.2
 
-RUN apt-get -y install git
-
 RUN sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list
-RUN apt-get update
-RUN apt-get install --assume-yes build-essential autoconf libtool
-# RUN apt-get build-dep --assume-yes imagemagick libmagickcore-dev libde265 libheif
+RUN apt-get -y update && \
+    apt-get install --no-install-recommends --assume-yes build-essential autoconf libtool && \
+    apt-get build-dep --assume-yes --no-install-recommends imagemagick libmagickcore-dev libde265 libheif
 
 WORKDIR /home
 RUN git clone https://github.com/strukturag/libheif.git
