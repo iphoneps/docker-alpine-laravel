@@ -17,8 +17,8 @@ apt-get install -yq nodejs  --no-install-recommends --no-install-suggests && \
 add-apt-repository ppa:ondrej/php && \
 apt-get --assume-yes -y update && \
 apt-get install --no-install-recommends --no-install-suggests --assume-yes -y  \
-	php8.1 php8.1-fpm \
-	php8.1-bcmath php8.1-mbstring php8.1-mysql php8.1-zip php8.1-curl php8.1-xml php8.1-gd php8.1-intl php8.1-dev && \
+	php8.2 php8.2-fpm \
+	php8.2-bcmath php8.2-mbstring php8.2-mysql php8.2-zip php8.2-curl php8.2-xml php8.2-gd php8.2-intl php8.2-dev && \
 # Install composer
 curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
 # Install git
@@ -28,6 +28,7 @@ apt-get autoclean && \
 # Create run folder for PHP process
 mkdir -p /run/php/
 
+# Install specific NPM version
 RUN npm i -g npm@9.2
 
 # Prepare imagemagick installation
