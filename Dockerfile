@@ -66,7 +66,7 @@ RUN ldconfig && \
     rm -rf libheif ImageMagick-7.1.0
 
 RUN apt-get update -y && \
-    apt-get install --no-install-recommends --no-install-suggests --assume-yes -y php8.1-imagick
+    apt-get install --no-install-recommends --no-install-suggests --assume-yes -y php8.2-imagick
 
 # Install & configure imagick
 RUN git clone https://github.com/Imagick/imagick
