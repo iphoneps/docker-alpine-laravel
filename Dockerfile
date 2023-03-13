@@ -88,11 +88,11 @@ RUN apt-get update -y && \
 
 
 # Configure PHP
-COPY ./docker-config/php-fpm.conf /etc/php/8.1/fpm/php-fpm.conf
-COPY ./docker-config/www.conf /etc/php/8.1/fpm/pool.d/www.conf
+COPY ./docker-config/php-fpm.conf /etc/php/8.2/fpm/php-fpm.conf
+COPY ./docker-config/www.conf /etc/php/8.2/fpm/pool.d/www.conf
 
-COPY ./docker-config/php.ini /etc/php/8.1/fpm/conf.d/zzz_custom.ini
-COPY ./docker-config/xdebug.ini /etc/php/8.1/fpm/conf.d/xdebug.inioff
+COPY ./docker-config/php.ini /etc/php/8.2/fpm/conf.d/zzz_custom.ini
+COPY ./docker-config/xdebug.ini /etc/php/8.2/fpm/conf.d/xdebug.inioff
 
 # Configure Nginx
 COPY ./docker-config/nginx.conf /etc/nginx/nginx.conf
