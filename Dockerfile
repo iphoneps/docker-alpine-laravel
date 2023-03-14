@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:20.04
 LABEL Maintainer="Admin <admin@iphonephotographyschool.com>"
 
 # Make sure random packages don't stop the installation by asking for user's input.
