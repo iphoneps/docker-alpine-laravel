@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 LABEL Maintainer="Admin <admin@iphonephotographyschool.com>"
 
 # Make sure random packages don't stop the installation by asking for user's input.
@@ -25,67 +25,14 @@ curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin
 apt-get -y install --no-install-recommends git && \
 # clean ubuntu apk cache
 apt-get autoclean && \
+apt-get autoremove -y && \
+rm -rf /var/lib/apt/lists/* && \
+rm -rf archive.tar.gz && \
 # Create run folder for PHP process
 mkdir -p /run/php/
 
 # Install specific NPM version
 RUN npm i -g npm@9.2
-
-# Prepare imagemagick installation
-RUN sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list && \
-    apt-get -y update && \
-    apt-get install --no-install-recommends --assume-yes build-essential autoconf libtool && \
-    apt-get build-dep --assume-yes --no-install-recommends imagemagick libmagickcore-dev libde265 libheif
-
-WORKDIR /home
-
-# Install & configure libheif
-RUN git clone https://github.com/strukturag/libheif.git
-
-WORKDIR /home/libheif
-
-RUN ./autogen.sh && \
-    ./configure && \
-    make && \
-    make install
-
-WORKDIR /home
-
-# Install & configure ImageMagick
-RUN git clone https://github.com/ImageMagick/ImageMagick.git ImageMagick-7.1.0
-
-WORKDIR /home/ImageMagick-7.1.0
-
-RUN ./configure --with-heic=yes && \
-    make && \
-    make install
-
-WORKDIR /home
-
-RUN ldconfig && \
-    rm -rf libheif ImageMagick-7.1.0
-
-RUN apt-get update -y && \
-    apt-get install --no-install-recommends --no-install-suggests --assume-yes -y php8.2-imagick
-
-# Install & configure imagick
-RUN git clone https://github.com/Imagick/imagick
-
-WORKDIR /home/imagick
-
-RUN phpize && ./configure && \
-    make && \
-    make install
-
-WORKDIR /home
-
-RUN rm -rf imagick
-
-RUN apt-get update -y && \
-    apt-get autoremove -y && \
-    rm -rf /var/lib/apt/lists/* && \
-    rm -rf archive.tar.gz
-
 
 # Configure PHP
 COPY ./docker-config/php-fpm.conf /etc/php/8.2/fpm/php-fpm.conf
