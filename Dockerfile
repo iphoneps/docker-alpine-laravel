@@ -18,7 +18,7 @@ add-apt-repository ppa:ondrej/php && \
 apt-get --assume-yes -y update && \
 apt-get install --no-install-recommends --no-install-suggests --assume-yes -y  \
 	php8.2 php8.2-fpm \
-	php8.2-bcmath php8.2-mbstring php8.2-mysql php8.2-zip php8.2-curl php8.2-xml php8.2-gd php8.2-intl php8.2-dev && \
+	php8.2-bcmath php8.2-mbstring php8.2-mysql php8.2-zip php8.2-curl php8.2-xml php8.2-gd php8.2-intl php8.2-dev php8.2-imagick && \
 # Install composer
 curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
 # Install git
@@ -34,58 +34,6 @@ mkdir -p /run/php/
 # Install specific NPM version
 RUN npm i -g npm@9.2
 
-# Prepare imagemagick installation
-RUN sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list && \
-    apt-get -y update && \
-    apt-get install --no-install-recommends --assume-yes build-essential autoconf libtool && \
-    apt-get build-dep --assume-yes --no-install-recommends imagemagick libmagickcore-dev libde265 libheif
-
-WORKDIR /home
-
-# Install & configure libheif
-RUN git clone https://github.com/strukturag/libheif.git
-
-WORKDIR /home/libheif
-
-RUN ./autogen.sh && \
-    ./configure && \
-    make && \
-    make install
-
-WORKDIR /home
-
-# Install & configure ImageMagick
-RUN git clone https://github.com/ImageMagick/ImageMagick.git ImageMagick-7.1.0
-
-WORKDIR /home/ImageMagick-7.1.0
-
-RUN ./configure --with-heic=yes && \
-    make && \
-    make install
-
-WORKDIR /home
-
-RUN ldconfig && \
-    rm -rf libheif ImageMagick-7.1.0
-
-RUN apt-get update -y && \
-    apt-get install --no-install-recommends --no-install-suggests --assume-yes -y php8.2-imagick && \
-    apt-get autoremove -y && \
-    rm -rf /var/lib/apt/lists/* && \
-    rm -rf archive.tar.gz
-
-# Install & configure imagick
-RUN git clone https://github.com/Imagick/imagick
-
-WORKDIR /home/imagick
-
-RUN phpize && ./configure && \
-    make && \
-    make install
-
-WORKDIR /home
-
-RUN rm -rf imagick
 # Configure PHP
 COPY ./docker-config/php-fpm.conf /etc/php/8.2/fpm/php-fpm.conf
 COPY ./docker-config/www.conf /etc/php/8.2/fpm/pool.d/www.conf
